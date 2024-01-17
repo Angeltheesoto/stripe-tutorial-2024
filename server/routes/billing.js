@@ -4,4 +4,6 @@ const router = require("express").Router();
 
 // !SEND SESSIONID AND URL TO CHECKOUT CART
 
+// !CHECK SESSION STATUS
+
 module.exports = router;

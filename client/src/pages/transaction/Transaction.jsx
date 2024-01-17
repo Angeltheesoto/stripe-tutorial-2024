@@ -14,40 +14,7 @@ const Transaction = () => {
   const [loading, setLoading] = useState(true);
   const [prevCart, setPrevCart] = useState(null);
 
-  useEffect(() => {
-    setPrevCart(cart ? cart : null);
-    const fetchPlan = async () => {
-      const sessionData = await sessionDataCall({
-        sessionId: session_id,
-      });
-      // console.log(sessionData);
-
-      const amountTotal = sessionData.amount_total;
-      const formatter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      });
-      const formattedAmountTotal = formatter.format(amountTotal / 100); // Convert from cents to dollars
-      // console.log(formattedAmountTotal);
-      if (formattedAmountTotal) {
-        setTotal(formattedAmountTotal);
-      }
-
-      if (sessionData) {
-        setSessionDetails(sessionData.payment_status);
-      }
-
-      // Set cart items to empty array
-      setCart((prev) => (prev = []));
-      localStorage.setItem("cart", JSON.stringify([]));
-
-      fetchProductData();
-
-      setLoading(false);
-    };
-
-    fetchPlan();
-  }, []);
+  // !HANDLE SESSION STATUS
 
   // console.log("status: " + sessionDetails);
   return (
