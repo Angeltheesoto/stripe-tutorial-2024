@@ -99,6 +99,24 @@ const Cart = () => {
   };
 
   // !HANDLE CHECKOUT
+  const handleCheckout = async () => {
+    try {
+      if (cart.length === 0 || !cart) {
+        showToast("You have no items in your cart.", "info");
+      }
+      const client_url = process.env.REACT_APP_CLIENT_URL;
+      const userCredentials = {
+        items: cart,
+        success_url: `${client_url}success`, // here
+        cancel_url: `${client_url}cart`,
+      };
+      const res = await createCheckout(userCredentials);
+      localStorage.setItem("checkout_session_id", res.sessionId);
+      window.location = res.url;
+    } catch {
+      console.error(`Could not create checkout session`);
+    }
+  };
 
   useEffect(() => {
     //   console.log(cart);

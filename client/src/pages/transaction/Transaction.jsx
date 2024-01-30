@@ -6,7 +6,7 @@ import { sessionDataCall } from "../../api/billing";
 import Container from "react-bootstrap/esm/Container";
 
 const Transaction = () => {
-  const { cart, setCart, fetchProductData } = useContext(dataContext);
+  const { cart, setCart } = useContext(dataContext);
   const searchParams = new URLSearchParams(window.location.search);
   const session_id = searchParams.get("session_id");
   const [sessionDetails, setSessionDetails] = useState(null);
@@ -15,6 +15,32 @@ const Transaction = () => {
   const [prevCart, setPrevCart] = useState(null);
 
   // !HANDLE SESSION STATUS
+  useEffect(() => {
+    setPrevCart(cart ? cart : null);
+    const fetchPlan = async () => {
+      const sessionData = await sessionDataCall({
+        sessionId: session_id,
+      });
+      const amountTotal = sessionData.amount_total;
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+      const formattedAmountTotal = formatter.format(amountTotal / 100); // Convert from cents to dollars
+      if (formattedAmountTotal) {
+        setTotal(formattedAmountTotal);
+      }
+      if (sessionData) {
+        setSessionDetails(sessionData.payment_status);
+      }
+      // Set cart items to empty array
+      setCart((prev) => (prev = []));
+      localStorage.setItem("cart", JSON.stringify([]));
+      setLoading(false);
+    };
+
+    fetchPlan();
+  }, []);
 
   // console.log("status: " + sessionDetails);
   return (
