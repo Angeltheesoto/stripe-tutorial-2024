@@ -1,4 +1,4 @@
-# stripe-tutorial-2023
+# stripe-tutorial-2024
 
 ## How to clone:
 
